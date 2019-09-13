@@ -1,0 +1,270 @@
+{
+	"info": {
+		"_postman_id": "de3b6389-de5f-459b-9762-b3cabdeeb9d8",
+		"name": "mongo service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get collections",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8002/getcollections",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8002",
+					"path": [
+						"getcollections"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insert",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Document\": {\n        \"name\": \"cr7\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8002/insert?collection=test1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8002",
+					"path": [
+						"insert"
+					],
+					"query": [
+						{
+							"key": "collection",
+							"value": "test1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\": {},\n    \"fields\":[\"pos\"]\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8002/find?collection=test1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8002",
+					"path": [
+						"find"
+					],
+					"query": [
+						{
+							"key": "collection",
+							"value": "test1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\": {\n        \"_id\": \"5d70f60978cf7a1969aa79ba\"\n    },\n    \"Document\": {\n        \"name\": \"ananthu cr7\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8002/update?collection=test1&many=true&create=False",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8002",
+					"path": [
+						"update"
+					],
+					"query": [
+						{
+							"key": "collection",
+							"value": "test1"
+						},
+						{
+							"key": "many",
+							"value": "true"
+						},
+						{
+							"key": "create",
+							"value": "False"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\": {\n        \"name\": \"ananthu cr7\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8002/delete?many=True&collection=test1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8002",
+					"path": [
+						"delete"
+					],
+					"query": [
+						{
+							"key": "many",
+							"value": "True"
+						},
+						{
+							"key": "collection",
+							"value": "test1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "keys",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8002/keys?collection=test1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8002",
+					"path": [
+						"keys"
+					],
+					"query": [
+						{
+							"key": "collection",
+							"value": "test1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "drop",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8002/drop?collection=test1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8002",
+					"path": [
+						"drop"
+					],
+					"query": [
+						{
+							"key": "collection",
+							"value": "test1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
