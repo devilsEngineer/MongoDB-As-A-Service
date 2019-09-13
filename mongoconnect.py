@@ -30,12 +30,10 @@ class Mongodb():
             settings.LOGGER.error("message= %s",str(exp)) 
 
     def set_db(self,user=None,pwd=None):
-        try:
-            self.database=self.client[settings.DATABASE]
-            if user is not None:
-                self.database.authenticate(user,pwd)
-        except Exception as exp:
-            settings.LOGGER.error("message= %s",str(exp))
+        self.database=self.client[settings.DATABASE]
+        if user is not None:
+            self.database.authenticate(user,pwd)
+
 
     def set_collection(self,collection):
         try:
@@ -103,8 +101,8 @@ class Mongodb():
             for doc in result:
                 doc["_id"]=str(doc["_id"])
 
-            response.update({'data':result})
-            response.update({'count':len(response['data'])})
+            response.update({'Documents':result})
+            response.update({'count':len(response['Documents'])})
             settings.LOGGER.info("Response Data= %s",response) 
             return response_data(response,status.HTTP_200_OK)
         except Exception as exp:
