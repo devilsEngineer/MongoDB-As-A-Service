@@ -85,6 +85,17 @@ def get_keys():
         LOGGER.error("message= %s",str(exp))
         return response_data(str(exp),status.HTTP_400_BAD_REQUEST)
 
+@app.route('/drop',methods=['POST'])
+def drop():
+    try:
+        collection=request.args.get("collection")
+        response=mongo.drop_collection(collection)
+        LOGGER.info("Response = %s",response)
+        return response
+    except Exception as exp:
+        LOGGER.error("message= %s",str(exp))
+        return response_data(str(exp),status.HTTP_400_BAD_REQUEST)
+
 
 if __name__ == '__main__':
     http_server = WSGIServer(('127.0.0.1', 8002), app)

@@ -43,6 +43,15 @@ class Mongodb():
         except Exception as exp:
             settings.LOGGER.error("message= %s",str(exp))
 
+    def drop_collection(self,collection):
+        try:
+            self.database[collection].drop()
+            settings.LOGGER.info("Response Data= %s","Collection Deleted") 
+            return response_data("Collection Deleted",status.HTTP_200_OK)
+        except Exception as exp:
+            settings.LOGGER.error("message= %s",str(exp))
+            return response_data(str(exp),status.HTTP_400_BAD_REQUEST)
+            
     def get_collections(self):
         """
         Get list of collections from DB
