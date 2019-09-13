@@ -3,7 +3,11 @@ from bson.objectid import ObjectId
 from flask_api import status
 from bson.json_util import dumps
 import settings
-from utils import convert2bool,response_data
+from utils import (
+    convert2bool,response_data,
+    form_selection_fields,
+    unique_list
+)
 class Mongodb():
 
     def __init__(self):
@@ -51,14 +55,13 @@ class Mongodb():
             settings.LOGGER.error("message= %s",str(exp))
             return response_data(str(exp),status.HTTP_400_BAD_REQUEST)
             
-    def insert(self,request):
+    def insert(self,collection,data):
         """
         Insert a doc to collection
         Document : data to insert
         """
         try:
-            data= request["Document"]
-            self.set_collection(request["collection"])
+            self.set_collection(collection)
             if type(data) is list:
                 self.collection.insert_many(data)
             else:
@@ -69,26 +72,28 @@ class Mongodb():
             settings.LOGGER.error("message= %s",str(exp))
             return response_data(str(exp),status.HTTP_400_BAD_REQUEST)
 
-    def find(self,collection,request):
+    def find(self,collection,query,fields):
         """
         Find a doc from a collection
         query : condition to find
         """
         try:
             self.set_collection(collection)
-            print(self.get_collection_keys())
             data={}
-            if request is not None and "query" in request:
-                data= request["query"]
-
             if '_id' in data:
                 data['_id']=ObjectId(data['_id'])
-
-            cursor=self.collection.find(data)
+            
+            if fields is not None:
+                selection_fields=form_selection_fields(fields)
+                cursor=self.collection.find(data,selection_fields)
+            else:
+                cursor=self.collection.find(data)
             response={}
             result=[doc for doc in cursor]
+
             for doc in result:
                 doc["_id"]=str(doc["_id"])
+
             response.update({'data':result})
             response.update({'count':len(response['data'])})
             settings.LOGGER.info("Response Data= %s",response) 
@@ -147,23 +152,20 @@ class Mongodb():
             settings.LOGGER.error("message= %s",str(exp))
             return response_data(str(exp),status.HTTP_400_BAD_REQUEST)
 
-    def get_collection_keys(self):
+    def get_collection_keys(self,collection):
         """Get a set of keys from a collection"""
-        keys_list = []
-        collection_list = self.collection.find({})
-        for document in collection_list:
-            for field in document.keys():
-                keys_list.append(field)
-        keys_set =  set(keys_list)
-        return keys_set
-
-    
-
-"""
-mongo=Mongodb()
-mongo.set_collection('test1')
-mongo.get_collections()
-#mongo.insert({"name":"ananthu"})
-#mongo.insert([{"name":"akhil"},{"name":"albin"}])
-#mongo.find({'name': 'ananthu'}) 
-"""
+        try:
+            self.set_collection(collection)
+            keys_list = []
+            collection_list = self.collection.find({})
+            for document in collection_list:
+                for field in document.keys():
+                    keys_list.append(field)
+            keys=unique_list(keys_list)
+            settings.LOGGER.info("Response Data= %s",keys)   
+            return response_data(keys,status.HTTP_200_OK)
+        except Exception as exp:
+            settings.LOGGER.error("message= %s",str(exp))
+            return response_data(str(exp),status.HTTP_400_BAD_REQUEST)
+        
+        

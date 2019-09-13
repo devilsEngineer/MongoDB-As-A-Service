@@ -23,8 +23,9 @@ def get_collections():
 @app.route('/insert',methods=['POST'])
 def insert_doc():
     try:
-        req = request.get_json()
-        response=mongo.insert(req)
+        collection =request.args.get("collection")
+        doc = request.get_json()["Document"]
+        response=mongo.insert(collection,doc)
         LOGGER.info("Response = %s",response)
         return response
     except Exception as exp:
@@ -37,7 +38,9 @@ def get_documents():
     try:
         collection =request.args.get("collection")
         req=request.get_json()
-        response=mongo.find(collection,req)
+        query=req.get("query")
+        fields = req.get("fields")
+        response=mongo.find(collection,query,fields)
         LOGGER.info("Response = %s",response)
         return response
     except Exception as exp:
@@ -65,6 +68,17 @@ def delete_doc():
         many = request.args.get("many")
         query=request.get_json()["query"]
         response=mongo.delete(query,collection,many)
+        LOGGER.info("Response = %s",response)
+        return response
+    except Exception as exp:
+        LOGGER.error("message= %s",str(exp))
+        return response_data(str(exp),status.HTTP_400_BAD_REQUEST)
+
+@app.route('/keys',methods=['GET'])
+def get_keys():
+    try:
+        collection=request.args.get("collection")
+        response=mongo.get_collection_keys(collection)
         LOGGER.info("Response = %s",response)
         return response
     except Exception as exp:

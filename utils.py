@@ -1,5 +1,14 @@
 import logging
 
+def form_selection_fields(fields):
+    selection_fields={}
+    for key in fields:
+        selection_fields[key]=1
+    return selection_fields
+
+def unique_list(source_list):
+  return list(dict.fromkeys(source_list))
+
 def convert2bool(value):
     if type(value)==str:
         value=value.lower()
