@@ -86,15 +86,15 @@ class Mongodb():
         """
         try:
             self.set_collection(collection)
-            data={}
-            if '_id' in data:
-                data['_id']=ObjectId(data['_id'])
+
+            if '_id' in query:
+                query['_id']=ObjectId(query['_id'])
             
             if fields is not None:
                 selection_fields=form_selection_fields(fields)
-                cursor=self.collection.find(data,selection_fields)
+                cursor=self.collection.find(query,selection_fields)
             else:
-                cursor=self.collection.find(data)
+                cursor=self.collection.find(query)
             response={}
             result=[doc for doc in cursor]
 
